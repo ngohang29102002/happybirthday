@@ -13,29 +13,30 @@ document.addEventListener('DOMContentLoaded', function() {
 // Khởi tạo music player với Web Audio API
 function initializeMusicPlayer() {
     const musicBtn = document.getElementById('musicBtn');
+    const birthdayAudio = document.getElementById('birthdayAudio');
     let isPlaying = false;
-    let audioContext = null;
-    
-    if (musicBtn) {
-        musicBtn.addEventListener('click', () => {
-            if (isPlaying) {
-                // Dừng nhạc
-                if (audioContext) {
-                    audioContext.close();
-                    audioContext = null;
-                }
+
+    // Đảm bảo audio sẵn sàng
+    birthdayAudio.volume = 0.7; // âm lượng vừa phải
+
+    musicBtn.addEventListener('click', async () => {
+        try {
+            if (!isPlaying) {
+                await birthdayAudio.play();
+                musicBtn.innerHTML = '<i class="fas fa-pause"></i><span>Pause Birthday Song</span>';
+                musicBtn.classList.add('playing');
+                isPlaying = true;
+            } else {
+                birthdayAudio.pause();
                 musicBtn.innerHTML = '<i class="fas fa-music"></i><span>Play Birthday Song</span>';
                 musicBtn.classList.remove('playing');
                 isPlaying = false;
-            } else {
-                // Phát nhạc Happy Birthday
-                playHappyBirthdaySong();
-                musicBtn.innerHTML = '<i class="fas fa-pause"></i><span>Pause Happy Birthday</span>';
-                musicBtn.classList.add('playing');
-                isPlaying = true;
             }
-        });
-    }
+        } catch (err) {
+            console.error("Không thể phát nhạc:", err);
+            musicBtn.innerHTML = '<i class="fas fa-music"></i><span>Audio not supported</span>';
+        }
+    });
 }
 
 // Tạo nhạc Happy Birthday bằng Web Audio API
@@ -286,4 +287,5 @@ function createSurpriseConfetti() {
 console.log('🎉 Happy Birthday Website loaded successfully!');
 console.log('🎵 Music player with Web Audio API');
 console.log('💖 Made with love for Ngô Hằng');
+
 console.log('✨ Enjoy the animations and effects!');
